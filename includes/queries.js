@@ -1,5 +1,5 @@
 const date_filter_var = `DATE_SUB(CURRENT_DATE('Europe/Bucharest'),INTERVAL 12 MONTH)`;
-const date_filter_incremental = `DATE_SUB(CURRENT_DATE('Europe/Bucharest'),INTERVAL 12 MONTH)`;
+const date_filter_incremental = `DATE_SUB(CURRENT_DATE('Europe/Bucharest'),INTERVAL 3 DAY)`;
 
 
 const gin_operational_XX = (c) => `
@@ -75,7 +75,7 @@ DISTINCT
 *
 FROM ranked_mms
 WHERE rank = 1) 
--- where cast(SUBSTR(gr_creation_date, 1, 10) As DATE FORMAT 'yyyy-mm-dd')>= ${date_filter_var} 
+Where cast(SUBSTR(gr_creation_date, 1, 10) As DATE FORMAT 'yyyy-mm-dd')>= ${date_filter_incremental} 
  ) a 
 left join
 (WITH LatestDates AS (

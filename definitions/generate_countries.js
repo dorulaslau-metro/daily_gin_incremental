@@ -5,14 +5,15 @@ countries.forEach((c) => {
     publish(`gin_operational_${c.iso2}`, {
         type: "incremental", 
         schema: "temp_orchestration",
-        bigquery: {
+        bigquery: { 
             partitionBy: "Date",
             //requirePartitionFilter: true
         }
         // ,
-        // preOperations: [
-        //     `DROP TABLE metro-bi-wb-inventory-s00.Country_dashboards.gin_operational_${c.iso2}`
-        // ]
+        , preOperations: [
+            `DELETE metro-bi-wb-inventory-s00.temp_orchestration.gin_operational_${c.iso2}
+            where DATE >= DATE_SUB(CURRENT_DATE('Europe/Bucharest'),INTERVAL 3 DAY)`
+        ]
     }).query(gin_operational_XX(c));
 
 });
