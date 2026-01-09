@@ -1,5 +1,5 @@
 module.exports.countries = [
-        // { iso2: "BG", internal: "BUL"}, 
+        { iso2: "BG", internal: "BUL"}, 
         // { iso2: "CZ", internal: "CZE"}, 
         // { iso2: "DE", internal: "GER"},
         // { iso2: "ES", internal: "ESP"}, 
@@ -8,7 +8,7 @@ module.exports.countries = [
         // { iso2: "HU", internal: "HUN"}, 
         // { iso2: "IT", internal: "ITA"}, 
         // { iso2: "KZ", internal: "KAZ"}, 
-        { iso2: "MD", internal: "MDA"}, 
+        // { iso2: "MD", internal: "MDA"}, 
         // { iso2: "NL", internal: "NED"},
         // { iso2: "PK", internal: "PAK"}, 
         // { iso2: "PL", internal: "POL"},
