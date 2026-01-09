@@ -1,4 +1,4 @@
-const schema_name = "Country_dashboards";
+const schema_name = "temp_orchestration";
 const {countries} = require("../includes/countries");
 const {gin_operational_XX} = require("../includes/queries_gin_operational");
 const {gin_usage} = require("../includes/query_gin_usage");
