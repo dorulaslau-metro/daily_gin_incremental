@@ -5,10 +5,8 @@
 //
 // to only show data as per const date_filter_incremental 
 // can change incremental update scope by changing this variable in file "../includes/incremental_filter.js"
-
-const {
-    date_filter_incremental
-} = require("../includes/incremental_filter")
+const {dataset_name} = require("../includes/dataset");
+const {date_filter_incremental} = require("../includes/incremental_filter")
 
 const gin_operational_XX = (c) => `
 SELECT
@@ -232,7 +230,7 @@ LEFT JOIN
         FROM
           (
             SELECT Date, Store_no, Country, SUM(GR_count) AS ss
-            FROM metro-bi-wb-inventory-s00.Country_dashboards.gin_usage
+            FROM metro-bi-wb-inventory-s00.${dataset_name}.gin_usage
             WHERE
               tool = 'MStore'
               AND DATE(Date) >= ${date_filter_incremental}
@@ -253,7 +251,7 @@ LEFT JOIN
     FROM
       (
         SELECT DISTINCT Country, GR_Type_no, GR_Type_name
-        FROM metro-bi-wb-inventory-s00.Country_dashboards.gin_usage
+        FROM metro-bi-wb-inventory-s00.${dataset_name}.gin_usage
         WHERE DATE(Date) >= ${date_filter_incremental}
       ) e
     LEFT JOIN
@@ -262,7 +260,7 @@ LEFT JOIN
         FROM
           (
             SELECT Date, GR_Type_no, Country, SUM(GR_count) AS ss
-            FROM metro-bi-wb-inventory-s00.Country_dashboards.gin_usage
+            FROM metro-bi-wb-inventory-s00.${dataset_name}.gin_usage
             WHERE
               tool = 'MStore'
               AND DATE(Date) >= ${date_filter_incremental}

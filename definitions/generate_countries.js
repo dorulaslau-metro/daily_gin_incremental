@@ -6,7 +6,7 @@
 // coresponding query and also delete all data older than 12 MONTHS. 
 // ONLY CHANGE incremental update scope by changing variable value in file "../includes/incremental_filter.js". 
 
-const dataset_name = "temp_orchestration";
+const {dataset_name} = require("../includes/dataset");
 const {date_filter_incremental} = require("../includes/incremental_filter");
 const {countries} = require("../includes/countries");
 

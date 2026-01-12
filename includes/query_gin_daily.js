@@ -8,6 +8,7 @@
 // to only show data as per const date_filter_incremental 
 // can change incremental update scope by changing this variable in file "../includes/incremental_filter.js"
 
+const {dataset_name} = require("../includes/dataset");
 const { date_filter_incremental } = require("../includes/incremental_filter")
 const { countries } = require("../includes/countries");
 

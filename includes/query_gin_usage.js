@@ -8,8 +8,7 @@
 
 const { date_filter_incremental } = require("../includes/incremental_filter")
 const { countries } = require("../includes/countries");
-
-
+const {dataset_name} = require("../includes/dataset");
 /**
  * --------------------------------------------------------------------------
  * Dynamic builders for gin_usage
@@ -53,7 +52,7 @@ SELECT
       END
     )
   ) / COUNT(DISTINCT Article_id) AS Missing_pallet_info
-FROM metro-bi-wb-inventory-s00.Country_dashboards.gin_operational_${iso2}
+FROM metro-bi-wb-inventory-s00.${dataset_name}.gin_operational_${iso2}
 WHERE DATE(Date) >= ${date_filter_incremental}
 GROUP BY
   Store_name, GR_Type_name, GR_types_Integration, Stores_Penetration,
