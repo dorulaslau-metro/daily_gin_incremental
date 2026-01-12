@@ -1,14 +1,11 @@
-// 2026-01-12 Doru Laslau: Changed for incremental (vs full load) is by:
-// filtering: 
-//
-//   metro-bi-dl-XX-prod.ingest_mmsstore_stgr.mw_kpi_goods_receiving
-//
-// to only show data as per const date_filter_incremental 
+// 2026-01-12 Doru Laslau: Union ALL of all the gin_operational_XX tables to streamline dashboard usage:
 // can change incremental update scope by changing this variable in file "../includes/incremental_filter.js"
 
 const { date_filter_incremental } = require("../includes/incremental_filter")
+const { countries } = require("../includes/countries");
 
-const gin_operational_XX = (c) => `
+
+const buildCountryBlockGinOperationalAllInOne = (c) => `
 select a.*, 
 b.Suppliers_type,b.Supplier_SSCC,b.date_from as SSCC_status_date_from,
 CONCAT(a.Store_no,'. ', c.store_desc) as Store_name, 
@@ -186,8 +183,17 @@ GROUP BY Date, GR_Type_no, Country)
 WHERE  ss > 1
 GROUP BY  Country, GR_Type_no) f
 on  e.Country = f.Country  and e.GR_Type_no = f.GR_Type_no) m on a.Country=m.Country and a.GR_Type_no=m.GR_Type_no
-`
+`;
+
+const buildGinOperationalTotal = (countries) => `
+SELECT a.*
+FROM (
+  ${countries.map((c) => `(${buildCountryBlockGinOperationalAllInOne(c)})`).join("\nUNION ALL\n")}
+) a
+`;
+
+const gin_operational_all_in_one = buildGinOperationalTotal(countries);
 
 module.exports = {
-    gin_operational_XX
+    gin_operational_all_in_one
 };

@@ -1,8 +1,16 @@
-const {
-    countries
-} = require("../includes/countries");
+// 2026-01-12 Doru Laslau: Changed for incremental (vs full load) is by:
+// filtering: 
+//
+//   metro-bi-dl-XX-prod.ingest_inventory.goods_inbound_articles
+//   metro-bi-dl-XX-prod.ingest_inventory.scan_process
+//   metro-bi-dl-XX-prod.ingest_inventory.delivery_note_pallet_articles
+//
+// to only show data as per const date_filter_incremental 
+// can change incremental update scope by changing this variable in file "../includes/incremental_filter.js"
 
-const date_filter_incremental = `DATE_SUB(CURRENT_DATE('Europe/Bucharest'),INTERVAL 3 DAY)`;
+const { date_filter_incremental } = require("../includes/incremental_filter")
+const { countries } = require("../includes/countries");
+
 
 /**
  * --------------------------------------------------------------------------
