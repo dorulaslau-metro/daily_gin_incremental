@@ -6,7 +6,7 @@
 // coresponding query and also delete all data older than 12 MONTHS. 
 // ONLY CHANGE incremental update scope by changing variable value in file "../includes/incremental_filter.js". 
 
-const schema_name = "temp_orchestration";
+const dataset_name = "temp_orchestration";
 const {date_filter_incremental} = require("../includes/incremental_filter");
 const {countries} = require("../includes/countries");
 
@@ -21,14 +21,14 @@ const {gin_daily} = require("../includes/query_gin_daily");
 countries.forEach((c) => {
     publish(`gin_operational_${c.iso2}`, {
         type: "incremental",
-        schema: schema_name,
+        schema: dataset_name,
         bigquery: {
             partitionBy: "Date",
-            clusterBy: ["Store_name", "GR_type_name","Tool","is_platform"]
+            //clusterBy: ["Store_name", "Tool", "GR_type_name", "is_platform"]
         } ,
         tags: ["gin_operational"],
         preOperations: [
-            `DELETE metro-bi-wb-inventory-s00.${schema_name}.gin_operational_${c.iso2}
+            `DELETE metro-bi-wb-inventory-s00.${dataset_name}.gin_operational_${c.iso2}
             WHERE DATE >= ${date_filter_incremental} 
             OR
             DATE < DATE_SUB(CURRENT_DATE('Europe/Bucharest'), INTERVAL 12 MONTH) 
@@ -39,14 +39,14 @@ countries.forEach((c) => {
 
 // publish("gin_operational", {
 //         type: "incremental",
-//         schema: schema_name,
+//         schema: dataset_name,
         // bigquery: {
         //     partitionBy: "Date",
         //     clusterBy: ["Country", "Store_no","Tool","GR_Creation_source"]
         // } ,
 //         // dependencies: countries.map(c => `gin_operational_${c.iso2}`),
 //         preOperations: [
-//             `DELETE metro-bi-wb-inventory-s00.${schema_name}.gin_operational
+//             `DELETE metro-bi-wb-inventory-s00.${dataset_name}.gin_operational
 //             WHERE DATE >= ${date_filter_incremental} 
 //             OR
 //             DATE < DATE_SUB(CURRENT_DATE('Europe/Bucharest'), INTERVAL 12 MONTH)`
@@ -58,13 +58,13 @@ countries.forEach((c) => {
 
     publish("gin_usage", {
         type: "incremental",
-        schema: schema_name,
+        schema: dataset_name,
         bigquery: {
             partitionBy: "Date",
-            clusterBy: ["Country", "Store_name", "GR_type_name","Tool"]
+            //clusterBy: ["Country", "Store_name", "GR_type_name","Tool"]
         } ,
         preOperations: [
-            `DELETE metro-bi-wb-inventory-s00.${schema_name}.gin_usage
+            `DELETE metro-bi-wb-inventory-s00.${dataset_name}.gin_usage
             WHERE DATE >= ${date_filter_incremental} 
             OR
             DATE < DATE_SUB(CURRENT_DATE('Europe/Bucharest'), INTERVAL 12 MONTH)`
@@ -74,15 +74,15 @@ countries.forEach((c) => {
     }).query(gin_usage);
 
     publish("gin_daily", {
-        type: "incremental",
-        schema: schema_name,
+        type: "table",
+        schema: dataset_name,
         // not partitioning and clustering as the resulting table is very small (~40MB)
         // bigquery: {
         //     partitionBy: "Date",
-        //     clusterBy: ["Country", "Store_name", "GR_type_name","Tool"]
+        //     //clusterBy: ["Country", "Store_name", "GR_type_name","Tool"]
         // } ,
         preOperations: [
-            `DELETE metro-bi-wb-inventory-s00.${schema_name}.gin_daily
+            `DELETE metro-bi-wb-inventory-s00.${dataset_name}.gin_daily
             WHERE DATE >= ${date_filter_incremental} 
             OR
             DATE < DATE_SUB(CURRENT_DATE('Europe/Bucharest'), INTERVAL 12 MONTH)`
